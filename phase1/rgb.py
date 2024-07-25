@@ -24,7 +24,7 @@ colors = [
 
 while True:
         for color in colors:
-            GPIO.output(R, color[0])
-            GPIO.output(G, color[1])
-            GPIO.output(B, color[2])
+            GPIO.output(R, not color[0])
+            GPIO.output(G, not color[1])
+            GPIO.output(B, not color[2])
             time.sleep(1)
