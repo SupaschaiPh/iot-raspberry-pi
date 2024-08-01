@@ -1,40 +1,27 @@
 import time
 import spidev
 
-# Initialize SPI
 spi = spidev.SpiDev()
-spi.open(0, 0)  # Open SPI bus 0, device (CS) 0
-spi.max_speed_hz = 1350000  # MCP3208 can work up to 1.35 MHz
-spi.mode = 0b01  # MCP3208 uses SPI mode 1
 
-def read_channel(channel):
-    """
-    Read the specified channel from MCP3208 (0-7).
+spi.open(0,0)
 
-    :param channel: Channel number (0-7)
-    :return: ADC value (0-4095)
-    """
-    if channel < 0 or channel > 7:
-        raise ValueError("Channel must be between 0 and 7")
+def anaread(channel):
 
-    # Construct the request bytes
-    request = [1, (8 + channel) << 4, 0]
-    response = spi.xfer2(request)
+    r = spi.xfer2([4 | 2 |(channel>>2), (channel &3) << 6,0])
 
-    # Combine the result bytes
-    data = ((response[1] & 3) << 8) + response[2]
+    adc_out = ((r[1]&15) << 8) + r[2]
 
-    return data
+    return adc_out
 
-# Example usage
-if __name__ == "__main__":
-    try:
-        while True:
-            for i in range(8):
-                value = read_channel(i)
-                print(f"Channel {i}: {value}")
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("Exiting...")
-    finally:
-        spi.close()
+
+while True:
+
+    reading = anaread(0)
+
+    voltage = reading * 3.3 / 4096
+
+    Temp = voltage * 99.5
+
+    print("Reading=%d\tVoltage=%f\tTemp=%2.2f" % (reading, voltage,Temp)) 
+
+    time.sleep(1)
