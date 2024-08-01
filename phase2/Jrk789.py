@@ -1,4 +1,3 @@
-```py
 import time
 import spidev
 
@@ -31,4 +30,3 @@ while True:
     thermister = CalcTempDegC(ReadChannel(2))
     print("Reading = %d\tVoltage = %.2fV\tTemperature = %.2f degC || Reading = %d Voltage = %.2fV Temperature = %.2f degC" % (mcp[0], mcp[1], mcp[2], thermister[0], thermister[1], thermister[2]))
     time.sleep(0.1) 
-```
