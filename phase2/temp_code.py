@@ -1,7 +1,6 @@
 import time
 import spidev
 import math
-import RPi.GPIO as GPIO  
 
 spi = spidev.SpiDev()
 spi.open(0, 0)
@@ -24,13 +23,16 @@ def CalcTempThermisterDegC(reading):
     tempC = tempK - 273.15
     return reading, voltage, tempC
 
-while True:
+def temp():
     mcp_data = CalcTempMCPDegC(ReadChannel(1))
     therm_data = CalcTempThermisterDegC(ReadChannel(2))
 
     print(f"Temp Sensor ==\tReading: {mcp_data[0]}\tVoltage: {mcp_data[1]:.2f}V\tTemp: {mcp_data[2]:.2f} Celsius",end="")
     print(f"\t\tThermistor Sensor ==\tReading: {therm_data[0]}\tVoltage: {therm_data[1]:.2f}V\tTemp: {therm_data[2]:.2f} Celsius")
      
-    
     time.sleep(0.5) 
+
+if __name__ == "__main__":
+    while True:
+        temp()
 
