@@ -51,9 +51,9 @@
 
                 // URL broker
 				var MQTTbroker = 'broker.mqttdashboard.com';
-				var MQTTport = 8884;
+				var MQTTport = 8000;
 				// Publish to topic
-				var MQTTpublishTopic = 'supass/iot/temp';
+				var MQTTpublishTopic = 'supass/iot/led';
 
 				//mqtt broker 
 				var client = new Paho.MQTT.Client(MQTTbroker, MQTTport,
@@ -68,7 +68,8 @@
 					},
 					onFailure: function (message) {
 						console.log("Connection failed, ERROR: " + message.errorMessage);
-					}
+					},
+					
 				};
 
 				client.connect(options);
@@ -86,14 +87,29 @@
 					}
 				});
 
+			
+
 				rangeSlider.noUiSlider.on('update', function(values, handle){
 					$(valueShow).text(parseInt(values[handle]));
 					$('#publish-button').data('value', parseInt(values[handle]));
+					//$.snackbar({content: snackbarMessage});
+					/*var value = $(this).data('value')+'';
+					message = new Paho.MQTT.Message(value);
+					message.destinationName = MQTTpublishTopic;
+					client.send(message); */
+					if(client.isConnected()){
+						//console.log(parseInt(values[0]))
+						message = new Paho.MQTT.Message(parseInt(values[0])+"");
+						message.destinationName = MQTTpublishTopic;
+						client.send(message); 
+					}
 				});
 
 				$('button').click(function(e){
 					$.snackbar({content: snackbarMessage});
 					var value = $(this).data('value')+'';
+					console.log(value)
+
 					message = new Paho.MQTT.Message(value);
 
 					message.destinationName = MQTTpublishTopic;
