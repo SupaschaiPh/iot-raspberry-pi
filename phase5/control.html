@@ -51,7 +51,7 @@
 
                 // URL broker
 				var MQTTbroker = 'broker.mqttdashboard.com';
-				var MQTTport = 8000;
+				var MQTTport = 8884;
 				// Publish to topic
 				var MQTTpublishTopic = 'supass/iot/led';
 
@@ -69,6 +69,7 @@
 					onFailure: function (message) {
 						console.log("Connection failed, ERROR: " + message.errorMessage);
 					},
+					useSSL:true
 					
 				};
 
