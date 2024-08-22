@@ -17,5 +17,5 @@ GPIO.setup(PIN_BUTTON, GPIO.IN)
 con_status = mqttc.connect("broker.mqttdashboard.com", 1883)
 print(con_status)
 while True:
-        mqttc.publish("supass/iot/button",  GPIO.input(PIN_BUTTON))
-        time.sleep(0.2)
+        mqttc.publish("supass/iot/button",  "ON"  if GPIO.input(PIN_BUTTON) == 1 else "OFF")
+        time.sleep(0.1)

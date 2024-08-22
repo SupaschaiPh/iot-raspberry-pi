@@ -1,8 +1,13 @@
 import paho.mqtt.client as mqtt
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+LIGHT = 4
+GPIO.setup(LIGHT,GPIO.OUT)
 
 MQTT_BROKER = 'mqtt-dashboard.com'  
 MQTT_PORT = 1883  
-MQTT_TOPIC = 'supass/iot'  
+MQTT_TOPIC = 'supass/iot/button'  
 
 # Define the callback functions
 def on_connect(client, userdata, flags, rc):
@@ -11,7 +16,9 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_TOPIC)
 
 def on_message(client, userdata, message):
-    print(f"Received message '{message.payload.decode()}' on topic '{message.topic}'")
+    #print(f"Received message '{message.payload.decode()}' on topic '{message.topic}'")
+    GPIO.output(LIGHT,message.payload.decode() == "ON")
+
 
 # Create a new MQTT client instance
 client = mqtt.Client()
